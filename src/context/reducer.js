@@ -1,5 +1,24 @@
 export const reducer = (state, action) => {
   switch (action.type) {
+    case 'FETCH_DATA':
+      const priceArr = action.payload.map((item) => item.price);
+      const amountArr = action.payload.map((item) => item.amount);
+      const priceSum = priceArr.reduce((acc, curr) => {
+        acc = +acc + +curr;
+        return acc;
+      });
+
+      const amountSum = amountArr.reduce((acc, curr) => {
+        acc = +acc + +curr;
+        return acc;
+      });
+
+      return {
+        isLoading: false,
+        mobiles: action.payload,
+        totalPrice: priceSum,
+        totalItem: amountSum,
+      };
     case 'INCREASE_ITEM':
       const { iId, iAmount } = action.payload;
       const newIMobiles = [...state.mobiles];
@@ -7,10 +26,10 @@ export const reducer = (state, action) => {
       newIMobiles.forEach((item) => {
         if (item.id === iId) {
           item.amount = iAmount + 1;
-          iPrice = item.price;
+          iPrice = +item.price;
         }
       });
-      // console.log('context: ', price);
+
       return {
         ...state,
         mobiles: newIMobiles,
@@ -25,7 +44,7 @@ export const reducer = (state, action) => {
         if (item.id === dId) {
           if (dAmount > 0) {
             item.amount = dAmount - 1;
-            dPrice = item.price;
+            dPrice = +item.price;
           }
         }
       });
@@ -34,6 +53,15 @@ export const reducer = (state, action) => {
         mobiles: newDMobiles,
         totalPrice: state.totalPrice - dPrice,
         totalItem: state.totalItem - 1,
+      };
+    case 'REMOVE_ITEM':
+      const { rId, rAmount, rPrice } = action.payload;
+      const newMobiles = [...state.mobiles].filter((item) => item.id !== rId);
+      return {
+        ...state,
+        mobiles: newMobiles,
+        totalPrice: state.totalPrice - rPrice * rAmount,
+        totalItem: state.totalItem - rAmount,
       };
     case 'CLEAR_ALL':
       return {

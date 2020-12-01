@@ -4,15 +4,16 @@ import './Navbar.css';
 import { useGlobalContext } from './context/shopContext';
 
 const Navbar = () => {
-  const [showTag, setShowTag] = useState(true);
+  const [showTag, setShowTag] = useState(false);
 
   const {
-    state: { totalItem },
+    state: { isLoading, totalItem },
   } = useGlobalContext();
 
   useEffect(() => {
-    if (totalItem < 1) setShowTag(false);
-  }, [totalItem]);
+    if (!isLoading && totalItem > 0) setShowTag(true);
+    else setShowTag(false);
+  }, [isLoading, totalItem]);
 
   return (
     <nav>

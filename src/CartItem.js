@@ -20,7 +20,12 @@ const CartItem = (props) => {
         <h4 className="item-price">${price}</h4>
         <button
           className="remove-btn"
-          onClick={() => console.log('remove item')}
+          onClick={() =>
+            dispatch({
+              type: 'REMOVE_ITEM',
+              payload: { rId: id, rAmount: amount, rPrice: price },
+            })
+          }
         >
           remove
         </button>

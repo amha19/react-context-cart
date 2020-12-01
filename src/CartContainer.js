@@ -6,9 +6,11 @@ import { useGlobalContext } from './context/shopContext';
 
 const CartContainer = () => {
   const {
-    state: { mobiles, totalPrice },
+    state: { mobiles, totalPrice, isLoading },
     dispatch,
   } = useGlobalContext();
+
+  if (isLoading) return <h2>Loading...</h2>;
 
   return (
     <section className="cart">
@@ -16,9 +18,13 @@ const CartContainer = () => {
         <h2>your bag</h2>
       </header>
       <div>
-        {mobiles.map((mobile, index) => {
-          return <CartItem key={index} {...mobile} />;
-        })}
+        {totalPrice > 0 ? (
+          mobiles.map((mobile, index) => {
+            return <CartItem key={index} {...mobile} />;
+          })
+        ) : (
+          <div className="empty-cart">nothing in your bag</div>
+        )}
       </div>
       <footer>
         <hr />
