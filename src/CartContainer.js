@@ -5,12 +5,14 @@ import './CartContainer.css';
 import { useGlobalContext } from './context/shopContext';
 
 const CartContainer = () => {
-  const {
-    state: { mobiles, totalPrice, isLoading },
-    dispatch,
-  } = useGlobalContext();
+  const { mobiles, totalPrice, isLoading, dispatch } = useGlobalContext();
 
-  if (isLoading) return <h2>Loading...</h2>;
+  if (isLoading)
+    return (
+      <section className="cart">
+        <h2>Loading...</h2>
+      </section>
+    );
 
   return (
     <section className="cart">

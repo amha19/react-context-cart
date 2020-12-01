@@ -19,40 +19,32 @@ export const reducer = (state, action) => {
         totalPrice: priceSum,
         totalItem: amountSum,
       };
-    case 'INCREASE_ITEM':
-      const { iId, iAmount } = action.payload;
-      const newIMobiles = [...state.mobiles];
-      let iPrice;
-      newIMobiles.forEach((item) => {
-        if (item.id === iId) {
-          item.amount = iAmount + 1;
-          iPrice = +item.price;
-        }
-      });
-
-      return {
-        ...state,
-        mobiles: newIMobiles,
-        totalPrice: state.totalPrice + iPrice,
-        totalItem: state.totalItem + 1,
-      };
-    case 'DECREASE_ITEM':
-      const newDMobiles = [...state.mobiles];
-      const { dId, dAmount } = action.payload;
-      let dPrice;
-      newDMobiles.forEach((item) => {
-        if (item.id === dId) {
-          if (dAmount > 0) {
-            item.amount = dAmount - 1;
-            dPrice = +item.price;
+    case 'CHANGE_AMOUNT':
+      const { id, type } = action.payload;
+      let price = state.totalPrice;
+      let itemAmount = state.totalItem;
+      const newMobile = [...state.mobiles].map((item) => {
+        if (item.id === id) {
+          if (type === 'inc') {
+            price += +item.price;
+            itemAmount += 1;
+            return { ...item, amount: item.amount + 1 };
+          }
+          if (type === 'dec') {
+            if (item.amount > 0) {
+              price -= +item.price;
+              itemAmount -= 1;
+              return { ...item, amount: item.amount - 1 };
+            }
           }
         }
+        return item;
       });
       return {
         ...state,
-        mobiles: newDMobiles,
-        totalPrice: state.totalPrice - dPrice,
-        totalItem: state.totalItem - 1,
+        mobiles: newMobile,
+        totalPrice: price,
+        totalItem: itemAmount,
       };
     case 'REMOVE_ITEM':
       const { rId, rAmount, rPrice } = action.payload;

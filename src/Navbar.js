@@ -6,9 +6,7 @@ import { useGlobalContext } from './context/shopContext';
 const Navbar = () => {
   const [showTag, setShowTag] = useState(false);
 
-  const {
-    state: { isLoading, totalItem },
-  } = useGlobalContext();
+  const { isLoading, totalItem } = useGlobalContext();
 
   useEffect(() => {
     if (!isLoading && totalItem > 0) setShowTag(true);

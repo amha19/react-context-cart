@@ -28,8 +28,12 @@ const AppProvider = ({ children }) => {
     });
   }, []);
 
+  const changeAmount = (id, type) => {
+    dispatch({ type: 'CHANGE_AMOUNT', payload: { id, type } });
+  };
+
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
+    <AppContext.Provider value={{ ...state, dispatch, changeAmount }}>
       {children}
     </AppContext.Provider>
   );
